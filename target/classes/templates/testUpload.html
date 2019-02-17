@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="../js/jquery.min.js"></script>
+<div>
+    <form action="/fileUpload.do" enctype="multipart/form-data" method="post" id="fileUploadForm">
+        <input type="file" name="file"/><br/>
+        <input type="file" name="file"/><br/>
+        <input type="file" name="file"/><br/>
+        <input type="button" value="上传" id="upLoadButton"/>
+    </form>
+    <script>
+        var uploading = false; //上传状态
+        //文件上传
+        $("#upLoadButton").click(function () {
+            if (uploading) {
+                alert("文件正在上传中，请稍候...");
+                return false;
+            }
+            $.ajax({
+                url: "/policy/upload",
+                type: 'POST',
+                cache: false, //上传不使用缓存
+                data: new FormData($('#fileUploadForm')[0]), //form表单内容使用formData组装
+                processData: false,
+                contentType: false,
+                dataType: "json",  //返回值类型
+                beforeSend: function () {
+                    uploading = true;
+                },
+                success: function (data) {
+                    alert(1);
+                    uploading = false;
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

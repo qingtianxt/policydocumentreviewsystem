@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: stdu.wzw.policydocumentreviewsystem.PolicydocumentreviewsystemApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.844 sec - in stdu.wzw.policydocumentreviewsystem.PolicydocumentreviewsystemApplicationTests

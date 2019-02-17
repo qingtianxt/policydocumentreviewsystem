@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stdu.wzw.mapper.ExecuteAndAbolishMapper">
+    <resultMap id="BaseResultMap" type="stdu.wzw.model.ExecuteAndAbolish">
+        <id column="executeabolish_id" property="executeabolishId" jdbcType="INTEGER"/>
+        <result column="execute_name" property="executeName" jdbcType="VARCHAR"/>
+        <result column="abolish_name" property="abolishName" jdbcType="VARCHAR"/>
+        <result column="reference" property="reference" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="policy_id" property="policyId" jdbcType="INTEGER"/>
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP"/>
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    executeabolish_id, execute_name, abolish_name, reference, create_date, policy_id, 
+    start_date, end_date
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from executeandabolish
+        where executeabolish_id = #{executeabolishId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from executeandabolish
+    where executeabolish_id = #{executeabolishId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="stdu.wzw.model.ExecuteAndAbolish">
+    insert into executeandabolish (executeabolish_id, execute_name, abolish_name, 
+      reference, create_date, policy_id, 
+      start_date, end_date)
+    values (#{executeabolishId,jdbcType=INTEGER}, #{executeName,jdbcType=VARCHAR}, #{abolishName,jdbcType=VARCHAR}, 
+      #{reference,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{policyId,jdbcType=INTEGER}, 
+      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="stdu.wzw.model.ExecuteAndAbolish">
+        insert into executeandabolish
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="executeabolishId != null">
+                executeabolish_id,
+            </if>
+            <if test="executeName != null">
+                execute_name,
+            </if>
+            <if test="abolishName != null">
+                abolish_name,
+            </if>
+            <if test="reference != null">
+                reference,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="policyId != null">
+                policy_id,
+            </if>
+            <if test="startDate != null">
+                start_date,
+            </if>
+            <if test="endDate != null">
+                end_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="executeabolishId != null">
+                #{executeabolishId,jdbcType=INTEGER},
+            </if>
+            <if test="executeName != null">
+                #{executeName,jdbcType=VARCHAR},
+            </if>
+            <if test="abolishName != null">
+                #{abolishName,jdbcType=VARCHAR},
+            </if>
+            <if test="reference != null">
+                #{reference,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="policyId != null">
+                #{policyId,jdbcType=INTEGER},
+            </if>
+            <if test="startDate != null">
+                #{startDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null">
+                #{endDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="stdu.wzw.model.ExecuteAndAbolish">
+        update executeandabolish
+        <set>
+            <if test="executeName != null">
+                execute_name = #{executeName,jdbcType=VARCHAR},
+            </if>
+            <if test="abolishName != null">
+                abolish_name = #{abolishName,jdbcType=VARCHAR},
+            </if>
+            <if test="reference != null">
+                reference = #{reference,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="policyId != null">
+                policy_id = #{policyId,jdbcType=INTEGER},
+            </if>
+            <if test="startDate != null">
+                start_date = #{startDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null">
+                end_date = #{endDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where executeabolish_id = #{executeabolishId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="stdu.wzw.model.ExecuteAndAbolish">
+    update executeandabolish
+    set execute_name = #{executeName,jdbcType=VARCHAR},
+      abolish_name = #{abolishName,jdbcType=VARCHAR},
+      reference = #{reference,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      policy_id = #{policyId,jdbcType=INTEGER},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP}
+    where executeabolish_id = #{executeabolishId,jdbcType=INTEGER}
+  </update>
+
+    <select id="findByPolicyId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from executeandabolish
+        where policy_id = #{policyId,jdbcType=INTEGER}
+    </select>
+</mapper>

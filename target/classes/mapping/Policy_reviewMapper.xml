@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stdu.wzw.mapper.Policy_reviewMapper">
+    <resultMap id="BaseResultMap" type="stdu.wzw.model.Policy_review">
+        <id column="reviewId" property="reviewid" jdbcType="INTEGER"/>
+        <result column="review_name" property="reviewName" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="upload_date" property="uploadDate" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="department_id" property="departmentId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="similarity_degree" property="similarityDegree" jdbcType="INTEGER"/>
+        <result column="legitimacydegree" property="legitimacydegree" jdbcType="INTEGER"/>
+        <result column="grade" property="grade" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    reviewId, review_name, url, type, upload_date, status, department_id, user_id, similarity_degree, 
+    legitimacydegree, grade
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from policyreview
+        where reviewId = #{reviewid,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from policyreview
+    where reviewId = #{reviewid,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="stdu.wzw.model.Policy_review">
+    insert into policyreview (reviewId, review_name, url, 
+      type, upload_date, status, 
+      department_id, user_id, similarity_degree, 
+      legitimacydegree, grade)
+    values (#{reviewid,jdbcType=INTEGER}, #{reviewName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{uploadDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{departmentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{similarityDegree,jdbcType=INTEGER}, 
+      #{legitimacydegree,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="stdu.wzw.model.Policy_review">
+        insert into policyreview
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reviewid != null">
+                reviewId,
+            </if>
+            <if test="reviewName != null">
+                review_name,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="uploadDate != null">
+                upload_date,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="departmentId != null">
+                department_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="similarityDegree != null">
+                similarity_degree,
+            </if>
+            <if test="legitimacydegree != null">
+                legitimacydegree,
+            </if>
+            <if test="grade != null">
+                grade,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reviewid != null">
+                #{reviewid,jdbcType=INTEGER},
+            </if>
+            <if test="reviewName != null">
+                #{reviewName,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="uploadDate != null">
+                #{uploadDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="similarityDegree != null">
+                #{similarityDegree,jdbcType=INTEGER},
+            </if>
+            <if test="legitimacydegree != null">
+                #{legitimacydegree,jdbcType=INTEGER},
+            </if>
+            <if test="grade != null">
+                #{grade,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="stdu.wzw.model.Policy_review">
+        update policyreview
+        <set>
+            <if test="reviewName != null">
+                review_name = #{reviewName,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="uploadDate != null">
+                upload_date = #{uploadDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="departmentId != null">
+                department_id = #{departmentId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="similarityDegree != null">
+                similarity_degree = #{similarityDegree,jdbcType=INTEGER},
+            </if>
+            <if test="legitimacydegree != null">
+                legitimacydegree = #{legitimacydegree,jdbcType=INTEGER},
+            </if>
+            <if test="grade != null">
+                grade = #{grade,jdbcType=INTEGER},
+            </if>
+        </set>
+        where reviewId = #{reviewid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="stdu.wzw.model.Policy_review">
+    update policyreview
+    set review_name = #{reviewName,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      upload_date = #{uploadDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      department_id = #{departmentId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      similarity_degree = #{similarityDegree,jdbcType=INTEGER},
+      legitimacydegree = #{legitimacydegree,jdbcType=INTEGER},
+      grade = #{grade,jdbcType=INTEGER}
+    where reviewId = #{reviewid,jdbcType=INTEGER}
+  </update>
+    <!-- 根据文档类型获取-->
+    <select id="findByType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from policyreview
+        where type=#{type,jdbcType=INTEGER}
+    </select>
+    <select id="findByList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from policyreview
+    </select>
+    <insert id="insertAndGetKey" keyProperty="reviewid" parameterType="stdu.wzw.model.Policy_review"
+            useGeneratedKeys="true">
+    insert into policyreview (reviewId, review_name, url,
+    type, upload_date, status,
+    department_id, user_id, similarity_degree,
+    legitimacydegree, grade)
+    values (#{reviewid,jdbcType=INTEGER}, #{reviewName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+    #{type,jdbcType=INTEGER}, #{uploadDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+    #{departmentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{similarityDegree,jdbcType=INTEGER},
+    #{legitimacydegree,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER})
+  </insert>
+</mapper>

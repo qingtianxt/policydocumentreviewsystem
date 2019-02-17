@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>H+ 后台主题UI框架 - 文章页面</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../css/plugins/checkweight/bootstrap.css" rel="stylesheet"/>
+    <link href="../css/plugins/checkweight/style.css" rel="stylesheet"/>
+    <link href="../css/plugins/checkweight/global.css" rel="stylesheet"/>
+    <link href="../css/plugins/checkweight/reset.css" rel="stylesheet"/>
+    <link href="../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  article">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="pull-right">
+                        <button class="btn btn-white btn-xs" type="button">700BIKE</button>
+                        <button class="btn btn-white btn-xs" type="button">BeginOne</button>
+                        <button class="btn btn-white btn-xs" type="button">乐视超级自行车</button>
+                    </div>
+                    <div th:each="content,iterStat:${contentList}">
+                        <th:block th:if="${iterStat.index eq 0}">
+                            <h1 th:text="${content.contentText}" style="font-size: 30px">
+                                自行车都智能化了，你可知道它的历史？
+                            </h1>
+                        </th:block>
+                        <th:block th:unless="${iterStat.index eq 0}">
+                            <p th:if="${content.similarityDegree>=70}"
+                            >
+                                <a href="javascript:void(0)"
+                                   class="g-font-color red"
+                                   th:onclick="'javascript:getByContent('+${content.contentId}+',\''+${content.contentText}+'\',\''+${content.similarityDegree}+'\');'"
+                                   th:text="${content.contentText}">
+                                </a>
+                            </p>
+                            <p th:if="${content.similarityDegree>=40&&content.similarityDegree<70}"
+                            >
+                                <a href="javascript:void(0)"
+                                   th:onclick="'javascript:getByContent('+${content.contentId}+',\''+${content.contentText}+'\',\''+${content.similarityDegree}+'\');'"
+                                   class="g-font-color orange"
+                                   th:text="${content.contentText}">
+                                </a>
+                            </p>
+                            <p th:text="${content.contentText}" th:unless="${content.similarityDegree>=40}">
+                                在不少旁观者的眼里，些生活中的庞然大物。
+                            </p>
+
+                        </th:block>
+
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>合法性详情</h5>
+                </div>
+                <div class="ibox-content" id="getByContentId">
+                    <div class="paper-txt P30 paper-section">
+                        <h4 class="MB10 font-bold">句子的不同颜色代表不同的合法性</h4>
+                        <ul class="unstyled">
+                            <li>
+                                <span class="notice-diamond red"></span>
+                                <span class="text-red MR5">红色</span>代表跟其他句子相关性在70%以上（说明有相关文档和其相似）
+                            </li>
+                            <li>
+                                <span class="notice-diamond orange"></span>
+                                <span class="g-font-color orange MR5">橙色</span>
+                                代表相关性在40%-70%（具有一定的相关性）
+                            </li>
+                            <li>
+                                <span class="notice-diamond black"></span>
+                                <span class="text-black MR5">黑色</span> 代表属于相关性很小的句子。
+                            </li>
+                        </ul>
+                        <p class="MT15">
+                            如果要查看段落详细检测结果<br> 请点击报告中红色、橙色标记的部分
+                        </p>
+                        <p class="MT20 font-bold">
+                            本系统包含<span class="text-green">段落修改功能，可以边看边对段落进行修改。</span>
+                            <br> 临时保存的段落可以在上方“修改文档”里看到，
+                            <br> 修改过的段落会变成绿色。
+                            <br>
+                            <span class="red">本功能受系统环境影响，请尽快将修改后的政策保存在word文档中</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="../js/content.min.js"></script>
+<script type="text/javascript" src="../js/Lib.js"></script>
+<script src="../js/plugins/toastr/toastr.min.js"></script>
+<!-- 日期格式化-->
+<script type="text/javascript">
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+</script>
+
+<!-- 段落分析模块，动态获取数据-->
+<script th:inline="javascript">
+    function getByContent(contentId, contentText, similarityDegree) {
+
+        //接收获取的相似信息
+        var list;
+        $.ajax({
+            url: "/policycompare/getContentSimilarity",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {
+                contentId: contentId
+            },
+            success: function (response) {
+                list = response;
+            },
+            error: function (response) {
+                toastr.error("信息获取失败");
+                return;
+            }
+        });
+
+        var indexs = new Array();
+        list.forEach(function (policysimilarity, index) {
+            if (policysimilarity.similarityDegree < 40) {
+                indexs.push(index)
+            }
+        })
+        indexs.forEach(function (index) {
+            list.pop(index);
+        })
+        var content = "";
+        content += "<span id=\"gototop\"></span>" +
+            "<div>" +
+            "<div class=\"paper-txt P30\">" +
+            "<div class=\"paper-section\" style=\"margin-bottom:0;\">" +
+            "<div class=\"font-bold MT5\">" +
+            "\t该段相似度：<span class=\"g-font-color red similarNum\">" + similarityDegree + "%</span>" +
+            "</div>" +
+            "<div class=\"MT30\">" +
+            "<p class=\"font-bold\">您的段落：</p>" +
+            "<span>" + contentText + "</span>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "<div>" +
+            "<div class=\"tab-A\">" +
+            "<ul class=\"tab-A-ul clearfix unstyled\" tab-a=\"ul\">" +
+            "<li class=\"active\" data-id=\"相关政策,历史政策,all\">" +
+            "<span class=\"tab-text\">综合</span>" +
+            "<span class=\"tab-superscript\">" + (list.length + 1) + "</span>" +
+            "</li>" +
+            "<li data-id=\"相关政策,1\">" +
+            "<span class=\"tab-text\">相关政策</span>" +
+            "<span class=\"tab-superscript\">" + list.length + "</span>" +
+            "</li>" +
+            "<li data-id=\"历史政策,2\">" +
+            "<span class=\"tab-text\">历史政策</span>" +
+            "<span class=\"tab-superscript\">1</span>" +
+            "</li>" +
+            "</ul>" +
+            "</div>" +
+            "<div class=\"content-tips\">" +
+            "<div class=\"tab-content none\" tab=\"section\" data-id=\"1\">" +
+            "<div class=\"paper-txt P30 paper-section clearfix\">" +
+            "<p class=\"g-font-color green pull-left\">" +
+            "\t按照政策相关性找到了：<span>" + list.length + "</span>篇" +
+            "<p>" +
+            "<div class=\"pull-right\">" +
+            "<a href=\"#modify_suggest\" class=\"g-btn g-btn-default g-btn-sm\">查看修改意见</a>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "<div class=\"tab-content none\" tab=\"section\" data-id=\"2\">" +
+            "<div class=\"paper-txt P30 paper-section clearfix\">" +
+            "<p class=\"g-font-color green pull-left\">" +
+            "\t按照政策的历史政策找到了：<span>1</span>篇" +
+            "<p>" +
+            "<div class=\"pull-right\">" +
+            "<a href=\"#modify_suggest\" class=\"g-btn g-btn-default g-btn-sm\">查看修改意见</a>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "<div class=\"tab-content\" tab=\"section\" data-id=\"all\">" +
+            "<div class=\"paper-txt P30 paper-section clearfix\">" +
+            "<p class=\"g-font-color green pull-left\">" +
+            "\t按照相关政策和历史政策共找到：<span>" + (list.length + 1) + "</span>篇" +
+            "<p>" +
+            "<div class=\"pull-right\">" +
+            "<a href=\"#modify_suggest\" class=\"g-btn g-btn-default g-btn-sm\">查看相似内容</a>" +
+            "" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "" +
+            "</div>";
+        list.forEach(function (policysimilarity, index) {
+            var policyContent;
+            var policy;
+            var policyKeyWord;
+            $.ajax({
+                url: "/policy/getContentById",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    contentId: policysimilarity.similarityContentId
+                },
+                success: function (response) {
+                    policyContent = response;
+                },
+                error: function (response) {
+                    toastr.error("段落信息获取失败");
+                    return;
+                }
+            });
+
+            $.ajax({
+                url: "/policy/getById",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    policyId: policysimilarity.similarityPolicyId
+                },
+                success: function (response) {
+                    policy = response;
+                },
+                error: function (response) {
+                    toastr.error("政策信息获取失败");
+                    return;
+                }
+            });
+            $.ajax({
+                url: "/policyanalysis/getKeyWordByPolicyId",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    policyId: policysimilarity.similarityPolicyId
+                },
+                success: function (response) {
+
+                    response.forEach(function (policysimilarity, index) {
+                        if (index == 0) {
+                            policyKeyWord = policysimilarity.analysisName;
+                        } else {
+                            policyKeyWord += " " + policysimilarity.analysisName;
+                        }
+                    })
+                },
+                error: function (response) {
+                    toastr.error("核心精神获取失败");
+                    return;
+                }
+            });
+            content +=
+                "<div class=\"tab-content\" tab=\"section\" data-id=\"相关政策\">" +
+                "<div>" +
+                "<div class=\"g-line-row\"></div>" +
+                "<div class=\"paper-txt P30\">" +
+                "<div class=\"paper-section\" style=\"margin-bottom:0;\">" +
+                "<div class=\"clearfix\">" +
+                "<div class=\"pull-left\">" +
+                "<span class=\"chapter-symbol\"></span>" +
+                "<span class=\"chapter-num\">" + (index + 1) + "</span>" +
+                "" +
+                "</div>" +
+                "<div class=\"font-bold pull-right\">" +
+                "\t相似度：<span class=\"g-font-color red similarNum\">" + policysimilarity.similarityDegree + "%</span>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"MT10\">" +
+                "<p class=\"font-bold\">您的段落：</p>" +
+                "<p class=\"g-font-color red\">" + contentText + "</p>" +
+                "" +
+                "</div>" +
+                "<div class=\"MT10\">" +
+                "<p class=\"font-bold\">相似段落：</p>" +
+                "<p class=\"g-font-color green\">" + policyContent.contentText + "</p>" +
+                "</div>" +
+                "<div class=\"MT10\">" +
+                "<p class=\"font-bold\">来源（对比库）：</p>" +
+                "<div class=\"local-source-detail\">" +
+                "<b>篇名：</b>" +
+                "<a href=\"/policycompare/getContentDetail?reviewid=" + policysimilarity.reviewId + "&policyId=" + policysimilarity.similarityPolicyId + "&contentId=" + policyContent.contentId + "\"  title=\"点击展开详细的对比信息\">" + policy.policyName + "</a>"
+                + "<br><b>上传者：</b>张国梅<br><b>作者单位：</b>广东技术师范学院天河学院,广东广州,510540<br><b>页数：</b>2页<br><b>上传时间：</b>" + new Date(policy.uploadDate).Format("yyyy-MM-dd") + "<br>" +
+                "<b>关键词：</b>" + policyKeyWord +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "" +
+                "</div>" +
+                "" +
+                "</div>";
+        });
+
+        content +=
+            "<div class=\"tab-content\" tab=\"section\" data-id=\"历史政策\">" +
+            "<div>" +
+            "<div class=\"g-line-row\"></div>" +
+            "<div class=\"paper-txt P30\">" +
+            "<div class=\"paper-section\" style=\"margin-bottom:0;\">" +
+            "<div class=\"clearfix\">" +
+            "<div class=\"pull-left\">" +
+            "<span class=\"chapter-symbol\"></span>" +
+            "<span class=\"chapter-num\">10</span>" +
+            "" +
+            "</div>" +
+            "<div class=\"font-bold pull-right\">" +
+            "\t相似度：<span class=\"g-font-color orange similarNum\">41%</span>" +
+            "</div>" +
+            "</div>" +
+            "<div class=\"MT10\">" +
+            "<p class=\"font-bold\">您的句子：</p>" +
+            "<p class=\"g-font-color orange\">通过<span class=\"g-underline-text\">运行</span><span class=\"g-underline-text\">程序</span>来检验<span class=\"g-underline-text\">程序</span><span class=\"g-underline-text\">的</span><span class=\"g-underline-text\">动态</span>行为<span class=\"g-underline-text\">和</span><span class=\"g-underline-text\">运行</span><span class=\"g-underline-text\">结果</span><span class=\"g-underline-text\">的</span>重要<span class=\"g-underline-text\">性</span>。</p>" +
+            "" +
+            "</div>" +
+            "<div class=\"MT10\">" +
+            "<p class=\"font-bold\">相似句子：</p>" +
+            "<p class=\"g-font-color green\">基于<span class=\"g-underline-text\">程序</span><span class=\"g-underline-text\">动态</span><span class=\"g-underline-text\">运行</span><span class=\"g-underline-text\">的</span>依赖信息<span class=\"g-underline-text\">和</span><span class=\"g-underline-text\">程序</span><span class=\"g-underline-text\">运行</span><span class=\"g-underline-text\">结果</span><span class=\"g-underline-text\">的</span>正确<span class=\"g-underline-text\">性</span>，</p>" +
+            "</div>" +
+            "<div class=\"MT10\">" +
+            "<p class=\"font-bold\">相似原文片段：</p>" +
+            "\t的应用局限性，本文重点研究根据动态切片的正确性统计概率计算程序语句调试优先度的可行性，并提出解决方案：<span class=\"g-font-color green\">基于程序动态运行的依赖信息和程序运行结果的正确性，</span>构造一个贝叶斯信度网络，估计程序语句造成程序错误的概率" +
+            "</div>" +
+            "<div class=\"MT10\">" +
+            "<p class=\"font-bold\">来源（学术期刊）：</p>" +
+            "<div class=\"local-source-detail\">" +
+            "<b>篇名：</b>《基于概率推演的动态程序切片优先度计算方法》<br><b>作者：</b>夏嘉斌<br><b>作者单位：</b>上海交通大学软件学院,上海,200240<br><b>参考文献：</b>16篇<br><b>页码：</b>P12—P16<br><b>页数：</b>5页<br><b>分类号：</b>TP311.53<br><b>机标分类号：</b>TP3 TN9" +
+            "<br><b>基金项目：</b>国家自然科学基金资助项目(60673120)<br><b>期刊名称：</b>《计算机与现代化》<br><b>出版时间：</b>2013年3期<br><b>ISSN：</b>1006-2475<br><b>关键词：</b>动态切片 程序调试 概率推演 自动化程序分析 错误定位<br><b>摘要：</b>为了提高程序调试的效率,本文提出一种基于概率推演自动计算动态程序切片中每条语句的正确概率并赋予优先度的方法.首先从程序运行过程抽取其相应的动态依赖关系图；然后根据依赖关系转化成贝叶斯网络；最后在该网络上运行概率推演并统计,得到程序静态语句的正确概率.使用具有优先度的动态程序切片结果可进一步提高调试人员定位缺陷和分析故障的效率.实验表明本方法平均可将实际错误排名在切片结果的前20.2％." +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "" +
+            "</div>" +
+            "" +
+            "</div>" +
+            "</div>" +
+            "<div class=\"back-to-top text-center\">" +
+            "<a href=\"#gototop\" class=\"font-bold g-font-color green\">回到顶部</a>" +
+            "</div>" +
+            "<div class=\"paper-footer\">" +
+            "<p>检测报告由" +
+            "<a href=\"http://www.paperpass.com/\" target=\"_black\">PaperPass</a>文献相似度检测系统生成</p>" +
+            "<p>Copyright © 2007-2018 PaperPass</p>" +
+            "</div>" +
+            "</div>";
+        $("#getByContentId").html(content);
+    }
+
+</script>
+<!--句子分析模块，修改建议事件-->
+<script type="text/javascript">
+    (function (System, $) {
+        var tab = System.Paper.tab();
+        var $advice = null;
+
+        function run() {
+            var i = 0;
+            $advice.show();
+            tab.call(this, {
+                callback: function () {
+                    var $num = $(this).find('.chapter-num');
+                    if ($num.length > 0) {
+                        i++;
+                        $num.text(i);
+                    }
+                }
+            });
+            //没有内容时同时不显示该句修改建议
+            if (0 === i) {
+                $advice.hide();
+            }
+        }
+
+        $(function () {
+            $advice = $('#advice');
+            $(document).on('click', '[tab-a="ul"] li', function () {
+                run.call(this);
+            });
+            $(document).on('click', '[tab-b="ul"] li', function () {
+                run.call(this);
+            });
+        });
+    })(Report, jQuery);
+</script>
+<script >
+    var s="";
+    $("#gaibian").html()
+</script>
+</body>
+
+</html>

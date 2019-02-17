@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="../js/plugins/layui/css/layui.css" media="all">
+    <link href="../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+</head>
+<body class=>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12 b-r">
+
+            <form role="form" th:action="@{/policy/updatePolicyInfo}" target="_parent">
+                <input type="hidden" name="policyId" th:value="${policy.policyId}">
+                <div class="form-group">
+                    <label>前趋政策：</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="testNoBtn" name="precursorId">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            </ul>
+                        </div>
+                        <!-- /btn-group -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>后继政策：</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="testNoBtn1" name="successorId">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            </ul>
+                        </div>
+                        <!-- /btn-group -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>分类：</label>
+                    <select class="input-sm form-control input-s-sm inline" name="policyType"
+                    >
+                        <option value="">请选择分类</option>
+                        <option th:each="type:${policy_types}" th:value="${type.typeId}" th:text="${type.typeName}">
+                            未分析
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group" th:if="${executeAndAbolish==1}">
+                    <label>施行日期：</label>
+                    <div class="layui-input-inline" style="width: 150px;">
+                        <input name="startDate" id="start" placeholder="施行日期" autocomplete="off"
+                               class="layui-input" readonly="readonly" value="" lay-key="1" type="text">
+                    </div>
+                    <label>废止日期：</label>
+                    <div class="layui-input-inline" style="width: 150px;">
+                        <input name="endDate" id="end" placeholder="废止日期" autocomplete="off"
+                               class="layui-input" readonly="readonly" value="" lay-key="2" type="text">
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn  btn-primary pull-right">设置</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+<script src="../js/content.min.js"></script>
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+<script src="../js/demo/peity-demo.min.js"></script>
+<script type="text/javascript"
+        src="../js/plugins/layui/layui.js"></script>
+<script src="../js/plugins/toastr/toastr.min.js"></script>
+<script src="../js/plugins/suggest/bootstrap-suggest.min.js"></script>
+<script th:inline="javascript">
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+
+        });
+        laydate.render({
+            elem: '#end' //指定元素
+
+        });
+    });
+</script>
+<script th:inline="javascript">
+    var list;
+    $.ajax({
+        url: "/policy/getAll",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {},
+        success: function (response) {
+            list = response;
+        },
+        error: function (response) {
+            toastr.error("信息获取失败");
+            return;
+        }
+    });
+    var datas = new Array();
+    list.forEach(function (policy) {
+        datas.push({
+            "policyId": policy.policyId,
+            "policyName": policy.policyName
+        })
+    })
+    var testBsSuggest = $("#testNoBtn").bsSuggest({
+        data: {"value": datas},
+        showBtn: false,
+        idField: "policyName",
+        keyField: "policyId"
+    }).on("onDataRequestSuccess", function (e, result) {
+        console.log("onDataRequestSuccess: ", result)
+    }).on("onSetSelectValue", function (e, keyword) {
+        console.log("onSetSelectValue: ", keyword)
+    }).on("onUnsetSelectValue", function (e) {
+        console.log("onUnsetSelectValue")
+    });
+    var testBsSuggest = $("#testNoBtn1").bsSuggest({
+        data: {"value": datas},
+        showBtn: false,
+        idField: "policyName",
+        keyField: "policyId"
+    }).on("onDataRequestSuccess", function (e, result) {
+        console.log("onDataRequestSuccess: ", result)
+    }).on("onSetSelectValue", function (e, keyword) {
+        console.log("onSetSelectValue: ", keyword)
+    }).on("onUnsetSelectValue", function (e) {
+        console.log("onUnsetSelectValue")
+    });
+</script>
+</body>
+</html>

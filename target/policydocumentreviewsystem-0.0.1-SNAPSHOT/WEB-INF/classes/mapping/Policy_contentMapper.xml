@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stdu.wzw.mapper.Policy_contentMapper">
+    <resultMap id="BaseResultMap" type="stdu.wzw.model.Policy_content">
+        <id column="content_id" property="contentId" jdbcType="INTEGER"/>
+        <result column="content_text" property="contentText" jdbcType="VARCHAR"/>
+        <result column="policy_id" property="policyId" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    content_id, content_text, policy_id
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from policycontent
+        where content_id = #{contentId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from policycontent
+    where content_id = #{contentId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="stdu.wzw.model.Policy_content">
+    insert into policycontent (content_id, content_text, policy_id
+      )
+    values (#{contentId,jdbcType=INTEGER}, #{contentText,jdbcType=VARCHAR}, #{policyId,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="stdu.wzw.model.Policy_content">
+        insert into policycontent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contentId != null">
+                content_id,
+            </if>
+            <if test="contentText != null">
+                content_text,
+            </if>
+            <if test="policyId != null">
+                policy_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contentId != null">
+                #{contentId,jdbcType=INTEGER},
+            </if>
+            <if test="contentText != null">
+                #{contentText,jdbcType=VARCHAR},
+            </if>
+            <if test="policyId != null">
+                #{policyId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="stdu.wzw.model.Policy_content">
+        update policycontent
+        <set>
+            <if test="contentText != null">
+                content_text = #{contentText,jdbcType=VARCHAR},
+            </if>
+            <if test="policyId != null">
+                policy_id = #{policyId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where content_id = #{contentId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="stdu.wzw.model.Policy_content">
+    update policycontent
+    set content_text = #{contentText,jdbcType=VARCHAR},
+      policy_id = #{policyId,jdbcType=INTEGER}
+    where content_id = #{contentId,jdbcType=INTEGER}
+  </update>
+
+
+    <!--根据政策id获取政策内容信息-->
+    <select id="selectByPolicyId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from policycontent
+        where policy_id = #{policyId,jdbcType=INTEGER}
+    </select>
+    <!--根据政策id统计政策的内容数-->
+    <select id="countByPolicyId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select
+      count(content_id)
+    from policycontent
+    where policy_id = #{policyId,jdbcType=INTEGER}
+  </select>
+    <!--根据政策id删除政策内容-->
+    <delete id="deleteByPolicyId" parameterType="java.lang.Integer">
+        delete from policycontent
+        where policy_id = #{policyId,jdbcType=INTEGER}
+    </delete>
+</mapper>

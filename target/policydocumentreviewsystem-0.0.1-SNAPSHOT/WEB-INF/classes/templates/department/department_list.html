@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>H+ 后台主题UI框架 - 嵌套列表</title>
+
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="gohome">
+        <a class="dropdown-toggle" data-toggle="dropdown" onclick="location.reload()"><i class="fa fa-refresh"></i></a>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>部门列表</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="nestable-menu">
+                        <button type="button" data-action="expand-all" class="btn btn-outline btn-success btn-sm">展开所有
+                        </button>
+                        <button type="button" data-action="collapse-all" class="btn  btn-outline btn-success btn-sm">
+                            收起所有
+                        </button>
+                    </div>
+
+                    <div class="dd" id="nestable2">
+                        <ol class="dd-list getList">
+                            <li class="dd-item" data-id="1">
+                                <div class="dd-handle">
+                                    <span class="label label-info"><i class="fa fa-users"></i></span> 群组
+                                </div>
+                                <ol class="dd-list">
+                                    <li class="dd-item" data-id="2">
+                                        <div class="dd-handle">
+                                            <!--<span class="pull-right"> 12:00 </span>-->
+                                            <span class="label label-info"><i class="fa fa-cog"></i></span> 设置
+                                        </div>
+                                    </li>
+                                    <li class="dd-item" data-id="3">
+                                        <div class="dd-handle">
+                                            <!--<span class="pull-right"> 11:00 </span>-->
+                                            <span class="label label-info"><i class="fa fa-bolt"></i></span> 筛选
+                                        </div>
+                                    </li>
+                                    <li class="dd-item" data-id="4">
+                                        <div class="dd-handle">
+                                            <!--<span class="pull-right"> 11:00 </span>-->
+                                            <span class="label label-info"><i class="fa fa-laptop"></i></span> 电脑
+                                        </div>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>部门管理</h5>
+                    <div class="ibox-tools">
+                        <a data-toggle="modal" href="#modal-form" class="btn btn-primary btn-xs">添加部门</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="commentForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">部门编号:</label>
+                            <div class="col-sm-8">
+                                <input id="cname" name="departmentId" id="departmentId" type="text"
+                                       class="form-control" readonly="readonly">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">部门名称:</label>
+                            <div class="col-sm-8">
+                                <input id="departmentName" type="text" class="form-control" name="departmentName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">父类名称:</label>
+                            <div class="col-sm-8">
+                                <input id="parentId" type="text" class="form-control" name="parentId">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建日期:</label>
+                            <div class="col-sm-8">
+                                <input id="createDate" type="text" class="form-control" name="createDate"
+                                       readonly="readonly">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-3">
+                                <button class="btn btn-primary" type="button"><i class="fa fa-trash-o"></i> 删除</button>
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-edit"></i> 修改</button>
+                            </div>
+                        </div>
+                        <div onclick="getById(1)">test</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 b-r">
+                        <h3 class="m-t-none m-b">添加部门</h3>
+
+                        <p></p>
+
+                        <form role="form" th:action="@{/department/save}">
+                            <div class="form-group">
+                                <label>部门名称：</label>
+                                <input type="text" placeholder="请输入部门名称" class="form-control" th:name="departmentName"
+                                       id="username">
+                            </div>
+                            <div class="form-group getAll">
+                                <label>部门父类名称：</label>
+                                <select class="form-control m-b" name="parentId">
+                                    <option>选项 1</option>
+                                </select>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"
+                                >
+                                    <strong>添加</strong>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/content.min.js"></script>
+<script src="../js/plugins/nestable/jquery.nestable.js"></script>
+<script src="../js/plugins/toastr/toastr.min.js"></script>
+<!--<script src="../js/plugins/validate/jquery.validate.min.js"></script>
+<script src="../js/plugins/validate/messages_zh.min.js"></script>
+<script src="../js/demo/form-validate-demo.min.js"></script>-->
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $(".dd").nestable("collapseAll");
+
+        $("#nestable-menu").on("click", function (e) {
+            var target = $(e.target),
+                action = target.data("action");
+            if (action === "expand-all") {
+                $(".dd").nestable("expandAll")
+            }
+            if (action === "collapse-all") {
+                $(".dd").nestable("collapseAll")
+            }
+        })
+        var content = "";
+        //页面载入时根据父类id遍历所有层的部门信息，放在左侧的列表中
+        $.ajax({
+            url: "/department/getByParentId",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {
+                parentId: 0,
+            },
+            success: function (response) {
+
+                content = "";
+                recursion(response);
+                $(".getList").html(content);
+            },
+            error: function (response) {
+            }
+        });
+
+        //递归展示每一层的部门
+        function recursion(response) {
+
+            response.forEach(function (department) {
+                content += "   <li class='dd-item' data-id='" + department.departmentId + "'>" +
+                    "                                <div class='dd-handle' onclick='getById(" + department.departmentId + ")'>" +
+                    "                                    <span class='label label-info'><i class='fa fa-users'></i></span> " + department.departmentName +
+                    "                                </div>";
+
+                $.ajax({
+                    url: "/department/getByParentId",
+                    type: "post",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        parentId: department.departmentId,
+                    },
+                    success: function (response1) {
+
+                        if (response1 != "" && response1 != null) {
+                            content += "<ol class=\"dd-list\">";
+                            recursion(response1);
+                            content += "</ol>";
+                        }
+
+                    },
+                    error: function (response) {
+                    }
+                });
+
+                content += "</li>"
+            })
+
+            return content;
+        }
+
+        //获取所有部门信息，放在右侧添加页面中
+        $.ajax({
+            url: "/department/getAll",
+            type: "post",
+            dataType: "json",
+            data: {
+                parentId: 0,
+            },
+            success: function (response) {
+                var content = " <label>部门父类名称：</label>  <select class=\"form-control m-b\" name=\"parentId\">";
+                content += "  <option value='0'>无</option>";
+
+                response.forEach(function (department) {
+                    content += " <option value='" + department.departmentId + "'>" + department.departmentName + "</option>";
+                })
+
+                content += "</select>";
+                $(".getAll").html(content);
+            },
+            error: function (response) {
+                //alert(response)
+            }
+        });
+
+    });
+</script>
+<script th:inline="javascript">
+    //根据id获取部门信息
+    function getById(departmentId) {
+        $.ajax({
+            url: "/department/getById",
+            type: "post",
+            dataType: "json",
+            data: {
+                departmentId: departmentId,
+            },
+            success: function (response) {
+                $("#departmentId").val(response.departmentId);
+                $("#departmentName").val(response.departmentName);
+                $("#parentId").val(response.parentId);
+                $("#createDate").val(response.createDate);
+            },
+            error: function (response) {
+                //alert(response)
+            }
+        });
+    }
+
+</script>
+<script th:inline="javascript">
+    if ([[${msg}]] == 1) {
+        toastr.success("添加成功");
+    }
+
+</script>
+</body>
+
+</html>

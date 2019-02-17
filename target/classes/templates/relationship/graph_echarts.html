@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>H+ 后台主题UI框架 - 百度ECHarts</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="../js/plugins/layer/skin/layer.css">
+
+</head>
+
+<body class="gray-bg">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="wrapper wrapper-content">
+            <div class="row animated fadeInRight">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <h2>
+                            <span class="text-navy">执行效果查询</span>
+                        </h2>
+
+                        <div class="search-form">
+                            <form action="/policy/geteffectiveness" method="post">
+                                <div class="input-group">
+                                    <input type="text" placeholder="政策名称" name="policyId"
+                                           class="form-control input-lg " id="testNoBtn" th:value="${policyId}"
+                                    >
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-white dropdown-toggle"
+                                                data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" th:if="${status==1}">
+
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>各地执行情况</h5>
+            </div>
+            <div class="ibox-content">
+                <div style="height:600px" id="echarts-map-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/plugins/echarts/echarts-all.js"></script>
+<script src="../js/content.min.js"></script>
+<script src="../js/plugins/suggest/bootstrap-suggest.min.js"></script>
+<script src="../js/plugins/toastr/toastr.min.js"></script>
+<script type="text/javascript"
+        src="../js/plugins/layer/layer.min.js"></script>
+<!-- 搜索推荐数据-->
+<script th:inline="javascript">
+    var list;
+    $.ajax({
+        url: "/policy/getAll",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {},
+        success: function (response) {
+            list = response;
+        },
+        error: function (response) {
+            toastr.error("信息获取失败");
+            return;
+        }
+    });
+    var datas = new Array();
+    list.forEach(function (policy) {
+        datas.push({
+            "policyId": policy.policyId,
+            "policyName": policy.policyName
+        })
+    })
+    var testBsSuggest = $("#testNoBtn").bsSuggest({
+        data: {"value": datas},
+        showBtn: false,
+        twoWayMatch: true,
+        idField: "policyName",
+        keyField: "policyId"
+
+    }).on("onDataRequestSuccess", function (e, result) {
+        console.log("onDataRequestSuccess: ", result)
+    }).on("onSetSelectValue", function (e, keyword) {
+        console.log("onSetSelectValue: ", keyword)
+    }).on("onUnsetSelectValue", function (e) {
+        console.log("onUnsetSelectValue")
+    });
+</script>
+<script th:inline="javascript">
+
+    var provinceList;
+    $.ajax({
+        url: "/place/getAllProvince",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {},
+        success: function (response) {
+            provinceList = response;
+        },
+        error: function (response) {
+            toastr.error("信息获取失败");
+            return;
+        }
+    });
+    var s = echarts.init(document.getElementById("echarts-map-chart")),
+        c = {
+            title: {
+                text: [[${policyName}]],
+                x: "center"
+            },
+            tooltip: {
+                trigger: "item",
+                show: false
+            },
+            legend: {
+                orient: "vertical",
+                x: "left",
+                data: ["创新条款", "执行条款"]
+            },
+            dataRange: {
+                min: 0,
+                max: 2500,
+                x: "left",
+                y: "bottom",
+                text: ["高", "低"],
+                calculable: !0
+            },
+            toolbox: {
+                show: !0,
+                orient: "vertical",
+                x: "right",
+                y: "center",
+                feature: {
+                    mark: {
+                        show: !0
+                    },
+                    dataView: {
+                        show: !0,
+                        readOnly: !1
+                    },
+                    restore: {
+                        show: !0
+                    },
+                    saveAsImage: {
+                        show: !0
+                    }
+                }
+            },
+            roamController: {
+                show: !0,
+                x: "right",
+                mapTypeControl: {
+                    china: !0
+                }
+            },
+            series:
+                [{
+                    name: "创新条款",
+                    type: "map",
+                    mapType: "china",
+                    roam: !1,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: !0
+                            }
+
+                        },
+                        emphasis: {
+                            label: {
+                                show: !0
+                            }
+                        }
+                    },
+                    data: [{
+                        name: "新疆",
+                        value: Math.round(1e3 * Math.random())
+                    }, {
+                        name: "宁夏",
+                        value: Math.round(1e3 * Math.random())
+                    }, {
+                        name: "广西",
+                        value: Math.round(1e3 * Math.random())
+                    }, {
+                        name: "香港",
+                        value: Math.round(1e3 * Math.random())
+                    }]
+                }, {
+                    name: "执行条款",
+                    type: "map",
+                    mapType: "china",
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: !0
+                            }
+                        },
+                        emphasis: {
+                            label: {
+                                show: !0
+                            }
+                        }
+                    },
+                    data: [{
+                        name: "新疆",
+                        value: Math.round(1e3 * Math.random())
+                    }, {
+                        name: "宁夏",
+                        value: Math.round(1e3 * Math.random())
+                    }, {
+                        name: "广西",
+                        value: Math.round(1e3 * Math.random())
+                    }, {
+                        name: "香港",
+                        value: Math.round(1e3 * Math.random())
+                    }]
+                }]
+        };
+
+    provinceList.forEach(function (province) {
+        c.series[1].data.push({
+            name: province.provinceName.replace("省", "").replace("市", "").replace("自治区", ""),
+            value: Math.round(1e3 * Math.random())
+        })
+        c.series[0].data.push({
+            name: province.provinceName.replace("省", "").replace("市", "").replace("自治区", ""),
+            value: 0
+        })
+    })
+
+    var provinceInfo = new Array();
+    var map = [[${map}]]
+    //判断中心文件是否有施行日期
+    var centerStartDate = [[${startDate}]];
+    for (var key in map) {
+        var province;
+        $.ajax({
+            url: "/place/getByProvinceId",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {
+                provinceId: key
+
+            },
+            success: function (response) {
+                province = response;
+            },
+            error: function (response) {
+                toastr.error("信息获取失败");
+                return;
+            }
+        });
+        var j = 0;//j表示创新政策的个数。
+        var list;
+
+
+        if (null != centerStartDate) {
+            map[key].forEach(function (p) {
+                var otherStartDate = p.startDate;
+                if (null == otherStartDate) {
+                    var otherList;
+                    $.ajax({
+                        url: "/policy/getExecuteAndAbolish",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            policyId: p.policyId
+                        },
+                        success: function (response) {
+                            otherList = response;
+                        },
+                        error: function (response) {
+                            return;
+                        }
+                    });
+                    otherList.forEach(function (executeAndAbolish) {
+                        if (null != executeAndAbolish.startDate) {
+                            otherStartDate = executeAndAbolish.startDate;
+                        }
+                    })
+                }
+                if (null != otherStartDate) {
+                    var cDate = new Date(centerStartDate).getTime();
+                    var oDate = new Date(otherStartDate).getTime();
+
+
+                    if (cDate > oDate) {
+                        j++;
+                    }
+                }
+            })
+        }
+
+        var provinceName = province.provinceName;
+        if (j > 0) {
+            for (var i = 0; i < c.series[0].data.length; i++) {
+                if (c.series[0].data[i].name == provinceName) {
+                    c.series[0].data[i].selected = true;
+                    c.series[0].data[i].value = j;
+                    c.series[1].data[i].value = 0;
+                }
+            }
+        }
+        if (map[key].length - j > 0) {
+            for (var i = 0; i < c.series[1].data.length; i++) {
+                if (c.series[1].data[i].name == provinceName) {
+                    c.series[1].data[i].selected = true;
+                    //判断该地方是否存在创新政策，如果没有创新政策需要c[0]值设置为0
+                    if (c.series[1].data[i].value != 0) {
+                        c.series[0].data[i].value = 0;
+                    }
+                    c.series[1].data[i].value = map[key].length - j;
+                }
+            }
+        }
+
+        var info = "";
+        if (j > 0 || map[key].length - j > 0) {
+            info += provinceName + "共有";
+            if (j > 0) {
+                info += j + "条创新政策，";
+            }
+            if (map[key].length - j > 0) {
+                info += map[key].length - j + "条执行政策";
+            }
+        }
+        //设置要保存的省份和相关政策的id,以及分部信息
+        var relatedPolicyId = "";
+        for (var k = 0; k < map[key].length; k++) {
+            if (k == 0) {
+                relatedPolicyId += map[key][k].policyId;
+            } else {
+                relatedPolicyId += "," + map[key][k].policyId;
+            }
+        }
+        provinceInfo.push({
+            provinceName: provinceName,
+            relatedPolicyId: relatedPolicyId,
+            info: info
+        });
+    }
+    s.setOption(c), $(window).resize(s.resize);
+    s.on('click', function (param) {
+        provinceInfo.forEach(function (p) {
+            if (p.provinceName == param.name) {
+                layer.open({
+                    skin: 'layui-layer-lan', //样式类名
+                    closeBtn: 0, //不显示关闭按钮
+                    anim: 2,
+                    shadeClose: true, //开启遮罩关闭
+                    content: p.info
+                });
+            }
+        })
+
+    })
+</script>
+<script th:inline="javascript">
+    var msg = [[${msg}]];
+    if (null != msg) {
+        if (msg == 1) {
+            toastr.error("该文档不存在");
+        }
+        else if (msg == 2) {
+            toastr.error("该文档不是中央文件");
+        }
+        else if (msg == 3) {
+            toastr.error("未找到执行政策。")
+        }
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stdu.wzw.mapper.SensitiveWordMapper" >
+  <resultMap id="BaseResultMap" type="stdu.wzw.model.SensitiveWord" >
+    <id column="sensitive_id" property="sensitiveId" jdbcType="INTEGER" />
+    <result column="sensitive_name" property="sensitiveName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sensitive_id, sensitive_name, type, create_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sensitiveword
+    where sensitive_id = #{sensitiveId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sensitiveword
+    where sensitive_id = #{sensitiveId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="stdu.wzw.model.SensitiveWord" >
+    insert into sensitiveword (sensitive_id, sensitive_name, type, 
+      create_date)
+    values (#{sensitiveId,jdbcType=INTEGER}, #{sensitiveName,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="stdu.wzw.model.SensitiveWord" >
+    insert into sensitiveword
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sensitiveId != null" >
+        sensitive_id,
+      </if>
+      <if test="sensitiveName != null" >
+        sensitive_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sensitiveId != null" >
+        #{sensitiveId,jdbcType=INTEGER},
+      </if>
+      <if test="sensitiveName != null" >
+        #{sensitiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="stdu.wzw.model.SensitiveWord" >
+    update sensitiveword
+    <set >
+      <if test="sensitiveName != null" >
+        sensitive_name = #{sensitiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where sensitive_id = #{sensitiveId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="stdu.wzw.model.SensitiveWord" >
+    update sensitiveword
+    set sensitive_name = #{sensitiveName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where sensitive_id = #{sensitiveId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findBylist" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from sensitiveword
+  </select>
+
+</mapper>

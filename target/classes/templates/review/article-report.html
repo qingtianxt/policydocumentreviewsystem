@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>H+ 后台主题UI框架 - 文章页面</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg sidebar-content">
+<div class="sidebard-panel" style="top: 125px; right: ; margin-left: -15px;position: fixed;">
+    <div class="m-t-md">
+        <h4>选择分析方式</h4>
+        <div>
+            <p id="button1">
+            </p>
+            <p id="button2">
+            </p>
+            <p id="button3">
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content  article">
+    <div class="gohome">
+        <a class="animated bounceInUp" href="javascript:history.back(-1)" title=返回列表><i class="fa fa-history"></i></a>
+    </div>
+    <div class="row">
+        <div class="col-lg-11 col-lg-offset-1">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <div class="m-b-md">
+                                <!-- <a href="#" class="btn btn-white btn-xs pull-right">编辑项目</a>-->
+                                <h2 th:text="${policy_review.reviewName}">01河北省地方税务局关于企业所得税若干业务问题的公告</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <dl class="dl-horizontal">
+
+                                <dt>政策作者:</dt>
+                                <dd>张三</dd>
+                                <dt>提交时间:</dt>
+                                <dd th:text="${#dates.format(policy_review.uploadDate,'yyyy-MM-dd')}">2018-10-28
+                                    21:49:36
+                                <dt>所在单位:</dt>
+                                <dd>河北省地方税务局</dd>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-sm-3" id="cluster_info">
+                            <dl class="dl-horizontal">
+
+                                <dt>政策字数:</dt>
+                                <dd>1752</dd>
+                                <dt>段落个数:</dt>
+                                <dd th:text="${#lists.size(contentList)}">64</dd>
+                                <dt>句子个数:</dt>
+                                <dd th:text="${#lists.size(list)}">86</dd>
+
+                            </dl>
+                        </div>
+                        <div class="col-sm-2" id="cluster_info">
+                            <dl class="dl-horizontal">
+
+                                <dt>总体合法性</dt>
+                                <!--<dd>70%</dd>-->
+                                <dt>70%</dt>
+                                <dt>
+                                    <div class="progress progress-striped active m-b-sm">
+                                        <div style="width: 70%;" class="progress-bar"></div>
+                                    </div>
+                                </dt>
+
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="pull-right">
+                        <button class="btn btn-white btn-xs" type="button">700BIKE</button>
+                        <button class="btn btn-white btn-xs" type="button">BeginOne</button>
+                        <button class="btn btn-white btn-xs" type="button">乐视超级自行车</button>
+                    </div>
+                    <div th:each="content,iterStat:${contentList}">
+                        <th:block th:if="${iterStat.index eq 0}">
+                            <h1 th:text="${content.contentText}">
+                                自行车都智能化了，你可知道它的历史？
+                            </h1>
+                        </th:block>
+                        <th:block th:unless="${iterStat.index eq 0}">
+                            <p th:text="${content.contentText}">
+                                在不少旁观者的眼里，些生活中的庞然大物。
+                            </p>
+                        </th:block>
+
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/content.min.js"></script>
+<script src="../js/contabs.min.js"></script>
+
+<script th:inline="javascript">
+    var reviewid = [[${policy_review.reviewid}]];
+    var content1 = "<button class=\"btn btn-primary btn-sm btn-block\" onclick=\"parent.addMenuTab('/policycompare/getContentByReviewidAndType?type=1&amp;reviewid=" + reviewid + "','全文分析','" + reviewid + "m')\" type=\"button\">" +
+        "                    <i class=\"fa fa-envelope\"></i>" +
+        "                    全文分析" +
+        "                </button>";
+    var content2 = "<button class=\"btn btn-primary btn-sm btn-block\" onclick=\"parent.addMenuTab('/policycompare/getContentByReviewidAndType?type=2&amp;reviewid=" + reviewid + "','段落分析','" + reviewid + "n')\" type=\"button\">" +
+        "                    <i class=\"fa fa-envelope\"></i>" +
+        "                    段落分析" +
+        "                </button>";
+    var content3 = "<button class=\"btn btn-primary btn-sm btn-block\" onclick=\"parent.addMenuTab('/policycompare/getContentByReviewidAndType?type=3&amp;reviewid=" + reviewid + "','条款分析','" + reviewid + "o')\" type=\"button\">" +
+        "                    <i class=\"fa fa-envelope\"></i>" +
+        "                    条款分析" +
+        "                </button>";
+
+    $("#button1").html(content1);
+    $("#button2").html(content2);
+    $("#button3").html(content3);
+</script>
+</body>
+
+</html>

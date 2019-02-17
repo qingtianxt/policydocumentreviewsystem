@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 后台主题UI框架 - 文件上传</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="../css/plugins/dropzone/dropzone.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>文件上传</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">选项1</a>
+                            </li>
+                            <li><a href="#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form id="my-awesome-dropzone" class="dropzone" action="#" enctype="multipart/form-data">
+                        <div class="dropzone-previews"></div>
+                        <button type="submit" class="btn btn-primary pull-right">提交</button>
+                    </form>
+                    <div>
+                        <div class="m">
+                            <small>DropzoneJS是一个开源库，提供拖放文件上传与图片预览：<a href="#"
+                                                                     target="_blank">https://github.com/enyo/dropzone</a>
+                            </small>
+                            ，百度前端团队提供的<a href="#" target="_blank">Web
+                            Uploader</a>也是一个非常不错的选择，值得一试！
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/content.min.js"></script>
+<script src="../js/plugins/dropzone/dropzone.js"></script>
+<script src="../js/plugins/toastr/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+        Dropzone.options.myAwesomeDropzone = {
+            url: "/policy/upload",
+            method: "post",
+            autoProcessQueue: false,
+            paramName: "file", //默认为file
+            acceptedFiles: ".doc,.docx,.jpeg",
+            uploadMultiple: true,
+            parallelUploads: 100,
+            dictResponseError: '文件上传失败!',
+            dictMaxFilesExceeded: "您最多只能上传100个文件！",
+            dictInvalidFileType: "你不能上传该类型文件,文件类型只能是*.jpg,*.gif,*.jpeg。",
+            maxFiles: 100,
+            init: function () {
+                var myDropzone = this;
+                this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    myDropzone.processQueue();
+                });
+                //放到待发送区域
+                this.on("sendingmultiple", function () {
+                });
+                //上传成功
+                this.on("successmultiple", function (response) {
+                    //Dropzone将返回的json数据解析为一个数组，要想拿到后台的返回数据，只有xhr属性里面可以找到。
+                    //alert(response[0].xhr.response);
+                    /*   toastr.options = {
+                           "closeButton": true,
+                           "debug": true,
+                           "progressBar": false,
+                           "positionClass": "toast-top-center",
+                           "showDuration": "400",
+                           "hideDuration": "1000",
+                           "timeOut": "7000",
+                           "extendedTimeOut": "1000",
+                           "showEasing": "swing",
+                           "hideEasing": "linear",
+                           "showMethod": "fadeIn",
+                           "hideMethod": "fadeOut"
+                       };*/
+
+                    var keys = response[0].xhr.response;
+                    if (keys == 'noUser') {
+                        toastr.info("您还没有登录,请先登录")
+                        return;
+                    }
+                    toastr.success("上传成功");
+                    $.ajax({
+                        url: "/policyanalysis/analysisContrastLibrary",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            keys: keys
+                        },
+                        success: function (response) {
+                            toastr.success("分析完成");
+                        },
+                        error: function (response) {
+                            //alert(response)
+                            toastr.success("分析完成");
+                        }
+                    });
+
+                });
+                //上传失败
+                this.on("errormultiple", function (response) {
+                    toastr.success("上传失败");
+                })
+            }
+        }
+    });
+</script>
+
+</body>
+
+</html>

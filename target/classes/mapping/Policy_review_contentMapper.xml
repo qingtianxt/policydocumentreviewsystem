@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="stdu.wzw.mapper.Policy_review_contentMapper">
+    <resultMap id="BaseResultMap" type="stdu.wzw.model.Policy_review_content">
+        <id column="content_id" property="contentId" jdbcType="INTEGER"/>
+        <result column="review_id" property="reviewId" jdbcType="INTEGER"/>
+        <result column="location" property="location" jdbcType="INTEGER"/>
+        <result column="similarity_degree" property="similarityDegree" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="stdu.wzw.model.Policy_review_content" extends="BaseResultMap">
+        <result column="content_text" property="contentText" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    content_id, review_id, location, similarity_degree
+  </sql>
+    <sql id="Blob_Column_List">
+    content_text
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from policyreviewcontent
+        where content_id = #{contentId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from policyreviewcontent
+    where content_id = #{contentId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="stdu.wzw.model.Policy_review_content">
+    insert into policyreviewcontent (content_id, review_id, location, 
+      similarity_degree, content_text)
+    values (#{contentId,jdbcType=INTEGER}, #{reviewId,jdbcType=INTEGER}, #{location,jdbcType=INTEGER}, 
+      #{similarityDegree,jdbcType=INTEGER}, #{contentText,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="stdu.wzw.model.Policy_review_content">
+        insert into policyreviewcontent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contentId != null">
+                content_id,
+            </if>
+            <if test="reviewId != null">
+                review_id,
+            </if>
+            <if test="location != null">
+                location,
+            </if>
+            <if test="similarityDegree != null">
+                similarity_degree,
+            </if>
+            <if test="contentText != null">
+                content_text,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contentId != null">
+                #{contentId,jdbcType=INTEGER},
+            </if>
+            <if test="reviewId != null">
+                #{reviewId,jdbcType=INTEGER},
+            </if>
+            <if test="location != null">
+                #{location,jdbcType=INTEGER},
+            </if>
+            <if test="similarityDegree != null">
+                #{similarityDegree,jdbcType=INTEGER},
+            </if>
+            <if test="contentText != null">
+                #{contentText,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="stdu.wzw.model.Policy_review_content">
+        update policyreviewcontent
+        <set>
+            <if test="reviewId != null">
+                review_id = #{reviewId,jdbcType=INTEGER},
+            </if>
+            <if test="location != null">
+                location = #{location,jdbcType=INTEGER},
+            </if>
+            <if test="similarityDegree != null">
+                similarity_degree = #{similarityDegree,jdbcType=INTEGER},
+            </if>
+            <if test="contentText != null">
+                content_text = #{contentText,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where content_id = #{contentId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="stdu.wzw.model.Policy_review_content">
+    update policyreviewcontent
+    set review_id = #{reviewId,jdbcType=INTEGER},
+      location = #{location,jdbcType=INTEGER},
+      similarity_degree = #{similarityDegree,jdbcType=INTEGER},
+      content_text = #{contentText,jdbcType=LONGVARCHAR}
+    where content_id = #{contentId,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="stdu.wzw.model.Policy_review_content">
+    update policyreviewcontent
+    set review_id = #{reviewId,jdbcType=INTEGER},
+      location = #{location,jdbcType=INTEGER},
+      similarity_degree = #{similarityDegree,jdbcType=INTEGER}
+    where content_id = #{contentId,jdbcType=INTEGER}
+  </update>
+    <!--根据审查文件id获取审查文件的内容-->
+    <select id="selectByReviewId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from policyreviewcontent
+        where review_id = #{reviewId,jdbcType=INTEGER}
+    </select>
+    <!--根据审查文件id获取一个审查文件产生多少段落-->
+    <select id="countByReviewId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select
+    count(content_id)
+    from policyreviewcontent
+    where review_id = #{reviewId,jdbcType=INTEGER}
+  </select>
+
+</mapper>
