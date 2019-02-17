@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="policydocumentreviewsystem:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="policydocumentreviewsystem-0.0.1-SNAPSHOT.war">
-      <element id="artifact" artifact-name="policydocumentreviewsystem:war exploded" />
-    </root>
-  </artifact>
-</component>
