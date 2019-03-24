@@ -186,4 +186,8 @@ public class PageController {
         return "relationship/search_results";
     }
 
+    @RequestMapping(value = {"role_add"})
+    public String role_add() {
+        return "user/role_add";
+    }
 }

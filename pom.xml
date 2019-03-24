@@ -208,7 +208,7 @@
            </dependency>-->
 
         <!-- shiro框架-->
-       <!-- <dependency>
+  <!--    <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
             <version>1.2.5</version>

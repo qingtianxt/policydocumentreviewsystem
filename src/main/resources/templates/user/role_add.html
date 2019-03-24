@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="../js/plugins/layui/css/layui.css" media="all">
+    <link href="../js/plugins/formSelects/formSelects-v4.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12 b-r">
+
+            <form role="form" action="/role/save" target="_parent" id="form">
+                <div class="form-group">
+                    <label>角色名称：</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="roleName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>包含权限：</label>
+                    <div class="input-group" style="display: inline">
+                        <select name="city" xm-select="select1">
+                            <option th:each="power:${powerList}" th:value="${power.powerId}"
+                                    th:text="${power.powerName}"></option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="power" id="power">
+                </div>
+                <div>
+                    <button type="button" onclick="save()" class="btn  btn-primary pull-right">设置</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript"
+        src="../js/plugins/layui/layui.all.js"></script>
+<script type="text/javascript"
+        src="../js/plugins/formSelects/formSelects-v4.js"></script>
+</body>
+<script type="text/javascript">
+    var formSelects = layui.formSelects;
+
+    function save() {
+        var roleStr = formSelects.value('select1', 'valStr');
+        $("#power").val(roleStr);
+        $("#form").submit();
+    }
+</script>
+</html>

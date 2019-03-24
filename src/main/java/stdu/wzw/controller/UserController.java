@@ -7,18 +7,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import stdu.wzw.model.User;
+import stdu.wzw.service.RoleService;
 import stdu.wzw.service.UserService;
 import stdu.wzw.utils.MD5Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
+/**
+ * 本模块实现用户功能。
+ */
 @RestController
 @RequestMapping(value = {"/user"})
 public class UserController {
 
+
     @Autowired
     private UserService userService;
+
 
     /**
      * 通过注册页面进入用户
@@ -38,11 +44,13 @@ public class UserController {
     @RequestMapping(value = "/login")
     public ModelAndView login(HttpServletRequest request, String username, String password) {
         User user = userService.getByUsername(username);
+
         if (null != user) {
             if (user.getPassword().equals(MD5Utils.md5(password))) {
                 request.getSession().setAttribute("existUser", user);
+                System.out.println(user);
                 System.out.println("用户登录成功");
-                return new ModelAndView("redirect:/page/index");
+                return new ModelAndView("redirect:/page/index1");
             } else {
                 //密码输入错误
                 return new ModelAndView("redirect:/page/login", "msg", "2");
@@ -84,8 +92,8 @@ public class UserController {
     public String add(User user) {
         user.setCreateDate(new Date());
         user.setPassword(MD5Utils.md5(user.getPassword()));
-        user.setRoleId(1);
         userService.save(user);
+
         return "success";
     }
 

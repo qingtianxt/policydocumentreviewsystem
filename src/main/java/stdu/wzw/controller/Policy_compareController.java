@@ -435,7 +435,7 @@ public class Policy_compareController {
                                     j++;
                                 }
                             }
-                            //j等于0，说明没有相同的内容，i1下标大于-1，说明里面已存在相同的内容，需要重置这个最大的相似度
+                            //j等于0，说明没有相同的内容，i1下标大于-1，d，需要重置这个最大的相似度
                             if (index1 >= 0) {
                                 compareForWordList.get(index1).setMaxSimilarity(similarity.getSimilarityDegree());
                             }

@@ -22,7 +22,6 @@
     <link rel="stylesheet"
           href="../js/plugins/layui/css/layui.css">
     <link href="../css/plugins/toastr/toastr.min.css" rel="stylesheet">
-
 </head>
 
 <body class="gray-bg">
@@ -61,7 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 m-b-xs">
-                                    <a class="btn btn-primary" data-toggle="modal" href="#modal-form">添加角色</a>
+                                    <a class="btn btn-primary" onclick="roleAdd(500,400)">添加角色</a>
                                 </div>
                             </div>
                         </div>
@@ -80,12 +79,14 @@
                             <tr th:each="role:${page.list}">
                                 <td th:text="${role.roleId}">1</td>
                                 <td th:text="${role.roleName}">张三</td>
-                                <td th:text="${role.createDate}">张三</td>
+                                <td th:text="${#dates.format(role.createDate,'yyyy-MM-dd')}">张三</td>
                                 <td>
                                     <a href="#"
-                                       class="btn btn-white btn-sm"><i class="fa fa-search"></i> 查看 </a>
+                                       class="btn btn-white btn-sm"
+                                       th:onclick="'javascript:powerInfo(500,400,'+${role.roleId}+');'"><i
+                                            class="fa fa-search"></i> 查看权限 </a>
                                     <a href="#"
-                                       th:href="@{'/department/delete?roleId='+${role.roleId}}"
+                                       th:href="@{'/role/delete?roleId='+${role.roleId}}"
                                        class="btn btn-white btn-sm"><i class="fa fa-trash-o"></i> 删除 </a>
                                 </td>
                             </tr>
@@ -100,7 +101,6 @@
         </form>
     </div>
 </div>
-
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/plugins/peity/jquery.peity.min.js"></script>
@@ -120,6 +120,9 @@
 <script th:inline="javascript">
     if ([[${msg}]] == 1) {
         toastr.success("添加成功");
+    }
+    if ([[${msg}]] == 2) {
+        toastr.success("删除成功");
     }
 
 </script>
@@ -161,9 +164,31 @@
         });
     });
 </script>
+<script>
+    function roleAdd(height, width) {
+        layer.open({
+            type: 2,
+            title: '添加角色',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: [height + 'px', width + 'px'],
+            content: '/role/addRole'
+        });
+    }
 
-
-
+    function powerInfo(height, width, roleId) {
+        layer.open({
+            type: 2,
+            title: '查看权限',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: [height + 'px', width + 'px'],
+            content: '/role/getPower?roleId=' + roleId
+        });
+    }
+</script>
 </body>
 
 </html>

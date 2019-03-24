@@ -71,7 +71,7 @@
         <table tableName="department" domainObjectName="Department" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>-->
-        <table tableName="executeandabolish" domainObjectName="ExecuteAndAbolish" enableCountByExample="false"
+        <table tableName="power" domainObjectName="Power" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>
     </context>

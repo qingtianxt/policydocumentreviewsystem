@@ -132,9 +132,16 @@
                             </div>
                             <div class="form-group">
                                 <label>部门：</label>
-                                <select class="input-sm form-control input-s-sm inline" name="departmentId"
+                                <select class="input-sm form-control input-s-sm inline" th:name="departmentId"
                                         id="department">
                                     <option value="">请选择部门</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>角色：</label>
+                                <select class="input-sm form-control input-s-sm inline" th:name="roleId"
+                                        id="role">
+                                    <option value="">请选择角色</option>
                                 </select>
                             </div>
                             <div>
@@ -197,22 +204,28 @@
     function userAdd() {
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
+        var department = document.getElementById("department").value;
+        var role = document.getElementById("role").value;
         $.ajax({
             url: "/user/add",
             type: "post",
             dataType: "json",
             data: {
                 username: username,
-                password: password
+                password: password,
+                departmentId: department,
+                roleId: role
             },
             success: function (response) {
                 toastr.success("添加成功");
-            },
+            }
+            ,
             error: function (response) {
                 //alert(response)
                 toastr.success("添加成功");
             }
-        });
+        })
+        ;
     }
 </script>
 <script>
@@ -234,6 +247,25 @@
             }
         });
         $("#department").html(departmentcontent);
+
+        var roleContent = "  <option value=\"\">请选择角色</option>";
+        $.ajax({
+            url: "/role/getAllRole",
+            type: "post",
+            dataType: "json",
+            async: false,
+            data: {},
+            success: function (response) {
+                console.log(response);
+                response.forEach(function (role) {
+                    roleContent += " <option value=" + role.roleId + ">" + role.roleName + "</option>"
+                })
+            },
+            error: function (response) {
+                return;
+            }
+        });
+        $("#role").html(roleContent);
 
     });
 </script>

@@ -6,7 +6,7 @@ spring:
             type: com.alibaba.druid.pool.DruidDataSource
             druid:
                  driver-class-name: com.mysql.jdbc.Driver
-                 url: jdbc:mysql://127.0.0.1:3306/policydocumentreviewsystem
+                 url: jdbc:mysql://39.106.26.170:3306/policydocumentreviewsystem
                  # url: jdbc:mysql://39.106.26.170:3306/policydocumentreviewsystem
                  username: root
                  password: 123456

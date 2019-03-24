@@ -9,6 +9,8 @@ public class Role {
 
     private Date createDate;
 
+    private String power;
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -31,5 +33,13 @@ public class Role {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getPower() {
+        return power;
+    }
+
+    public void setPower(String power) {
+        this.power = power == null ? null : power.trim();
     }
 }
